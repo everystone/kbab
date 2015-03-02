@@ -11,6 +11,9 @@ using System.Threading.Tasks;
  * 
  * @TODO: Load favorites and exe path from file
  * Export/import as json.
+ * WEll WELL WELL. Works with All Steam servers(?).
+ * Let user add servers from all games that uses steam server protocol.
+ * In list, sort by game. If user selects # from another game, launch that one.
  */
 
 namespace Arma3Favorites
@@ -23,19 +26,26 @@ namespace Arma3Favorites
         static void Main(string[] args)
         {
 
-          Dictionary<string, int> favorites = new Dictionary<string, int>()
+           /*   ARMA SA-MATRA WASTELAND SERVERS */
+
+            Dictionary<string, int> favorites = new Dictionary<string, int>()
+              {
+              {"31.3.230.66", 3102},// UK #4   
+              {"37.59.53.188", 2303}, // UK #5
+              {"81.19.208.102",2403}, // UK #2
+              {"81.19.208.101", 2603}, //UK #1 //03? 02?
+              {"81.19.208.113", 2702}, //UK #6
+              {"81.19.208.112", 2603}, // UK#3 hc
+              {"37.187.77.180", 2403}, //FR 1 Chernarus
+              {"5.39.85.45", 2303}, // UK #8            
+              {"85.159.42.196", 2303} //RU #1
+          };
+
+            /* CS-GO SERVERS 
+            Dictionary<string, int> favorites = new Dictionary<string, int>()
             {
-            {"31.3.230.66", 3103},// UK #4   
-           
-            {"81.19.208.102",2403}, // UK #2
-            {"81.19.208.101", 2603}, //UK #1
-            {"37.187.77.180", 2403}, //FR 1 Chernarus
-            {"81.19.208.113", 2703}, //UK #6
-            {"81.19.208.112", 2603}, // UK#3 hc
-            {"5.39.85.45", 2303}, // UK #8
-            {"37.59.53.188", 2303} // UK #5
-            
-        };
+                {"83.143.87.148",27080}
+            };*/
             String ascii = @" __  __ ______ _______ ______      ____      ______ 
 |  |/  |   __ \   _   |   __ \    |_   |    |      |
 |     <|   __ <       |   __ <     _|  |_ __|  --  |

@@ -44,7 +44,15 @@ namespace Arma3Favorites
         }
         public String printSmall()
         {
-            return(String.Format("{0} {1} {2}/{3}", name.Substring(0, 38), map, players, maxplayers));
+            //if name contains #<number>, split on it.
+
+            string shortName = name;
+            if (shortName.Contains("#")) { 
+                var array = shortName.Split('#');
+                shortName = array[0] + array[1][0]; // Servername UK #1
+            }
+            if (shortName.Length > 40) shortName = shortName.Substring(0, 40);
+            return(String.Format("{0} {1} {2}/{3}", shortName, map, players, maxplayers));
         }
 
         /* Start ARMA 3 with ip param */
@@ -52,7 +60,7 @@ namespace Arma3Favorites
         {
             Process game = new Process();
             game.StartInfo.FileName = config.exe;
-            game.StartInfo.Arguments = "-connect=" + ip + " -port=" + port;
+            game.StartInfo.Arguments = "-nosplash -connect=" + ip + " -port=" + port;
             game.Start();
         }
         
