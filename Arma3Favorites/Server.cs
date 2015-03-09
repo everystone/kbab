@@ -18,7 +18,13 @@ namespace Arma3Favorites
         Int16 players;
         Int16 maxplayers;
         long ping;
+        String gametags;
 
+        /*Game tags */
+        bool battleeye;
+        string platform;
+        bool locked;
+        bool dedicated;
 
         public Server(string ip, int port)
         {
@@ -33,9 +39,20 @@ namespace Arma3Favorites
         public void setGame(String game) { this.game = game; }
         public void setMission(String mission) { this.mission = mission; }
         public void setPing(long ping) { this.ping = ping; }
-
         public long getPing() { return ping; }
+        public bool isLocked() { return locked; }
+        public String getTags() { return gametags; }
 
+        /*bt,r140,n0,s7,i2,mf,lf,vt,dt,tsandbox,g65545,c4194303-4194303,pw,
+         https://community.bistudio.com/wiki/STEAMWORKSquery
+         */
+        public void setTags(String tags) { 
+            this.gametags = tags;
+            string[] arr = tags.Split(',');
+            battleeye = arr[0].Equals("bt");
+            locked = arr[6].Equals("lt"); //lock true
+        
+        }
         public String printInfo()
         {
             String info = String.Format("{0} ({1}, {2}, {3}) {4}/{5}", name, game, map, mission, players, maxplayers);
@@ -60,7 +77,7 @@ namespace Arma3Favorites
         {
             Process game = new Process();
             game.StartInfo.FileName = config.exe;
-            game.StartInfo.Arguments = "-nosplash -connect=" + ip + " -port=" + port;
+            game.StartInfo.Arguments = "-nosplash -connect=" + ip + " -port=" + (port-1); //Gameport is one below steam query port
             game.Start();
         }
         

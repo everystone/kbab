@@ -99,6 +99,7 @@ namespace Arma3Favorites
             Server server = new Server(ip, port);
             using (UdpClient udpClient = new UdpClient())
             {
+                udpClient.Client.ReceiveTimeout = 5000;
                 udpClient.Connect(ep);
                 try
                 {
@@ -109,7 +110,8 @@ namespace Arma3Favorites
                 }
                 catch (Exception ex)
                 {
-                    //Console.WriteLine("FUCKUP: " + ex.Message);
+                    //Console.WriteLine("Error: " + ex.Message);
+                    //Console.WriteLine("Error: Server " + ip + ":" + port + " Not responding.");
                     udpClient.Close();
                     return null;
                 }
@@ -126,6 +128,9 @@ namespace Arma3Favorites
                 pos += 2; // skip 2 next bytes ( 2x 0x00)
                 server.setPlayers(readByte(rec));
                 server.setMaxPlayers(readByte(rec));
+                //Skip 16 bytes
+                pos += 28;
+                server.setTags(readString(rec));
                 //pos += 1; // skip 0x00
                 //int test = readbyte(rec); // 119?
                 //Debug
