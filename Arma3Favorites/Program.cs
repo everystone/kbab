@@ -24,36 +24,65 @@ namespace Arma3Favorites
     {
         static List<Server> servers;
         static Dictionary<string, int> favorites;
+
+        public static void autoJoin(Server serv)
+        {
+            int delay = 30; //seconds
+            while (true)
+            {
+                Console.Clear();
+                Console.Write("Ip: " + serv.getIp() + " port: " + serv.getPort());
+                Console.WriteLine("Server Status: ");
+                Server auto = engine.fetch(serv.getIp(), serv.getPort());
+                if (auto == null)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("OFFLINE");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    auto.printSmall();
+                    if (!auto.isLocked())
+                    {
+                        Console.WriteLine("\nJoining server...");
+                        auto.open();
+                        break;
+                    }
+                }
+                Console.WriteLine("Autojoin active");
+                Console.WriteLine("Refresh every " + delay + " seconds.");
+                System.Threading.Thread.Sleep(delay * 1000);
+            }
+        }
+
+
         static void refresh()
         {
             int i = 0;
+            string mission = "";
+            servers.Clear();
+
             foreach (KeyValuePair<string, int> server in favorites)
             {
                 Server s = engine.fetch(server.Key, server.Value);
                 if (s != null)
                 {
                     servers.Add(s);
+                    /* Delimiter between different missions / mods */
+                    if (!s.getMission().Equals(mission))
+                    {
+                        mission = s.getMission();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(mission);
+                        Console.ResetColor();
+                    }
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.Write("#" + i + " ");
                     Console.ResetColor();
-                    Console.Write(s.printSmall());
 
-                    //Check if server is locked ( password protected ).
-                    if (s.isLocked())
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(" [LOCKED]");
-                        Console.ResetColor();
-                    }
-                    
-                    //Check ping
-                    long ping = s.getPing();
-                    if (ping > 150) Console.ForegroundColor = ConsoleColor.Red;
-                    else if (ping > 90) Console.ForegroundColor = ConsoleColor.Yellow;
-                    else Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(" " + ping + "ms");
 
-                    Console.ResetColor();
+                    s.printSmall();
 
 
                     i++;
@@ -74,32 +103,44 @@ namespace Arma3Favorites
              favorites = new Dictionary<string, int>()
                {
                
+                   /* Wasteland */
                {"37.59.53.188", 2303}, // UK #5
-               {"81.19.208.102",2403}, // UK #2
-               {"81.19.208.101", 2603}, //UK #1 //03? 02?
-             
                {"81.19.208.112", 2603}, // UK#3 hc
-               {"37.187.77.180", 2403}, //FR 1 Chernarus
-               {"5.39.85.45", 2303}, // UK #8            
                {"85.159.42.196", 2303}, //RU #1
                {"31.3.230.66", 3103},// UK #4  
-                {"81.19.208.113", 2703 },//UK #6
+               {"81.19.208.101", 2603}, //UK #1
+               
+               
+               {"37.187.77.180", 2403}, //FR 1 Chernarus
+               {"81.19.208.102",2403}, // UK #2
+               {"5.39.85.45", 2303}, // UK #8            
+
 
                 // Battleroyale EU stratis
                  {"94.23.15.45",2303}, //EU 1
                 {"188.165.204.150",2303}, // EU 2
                 {"81.19.216.152", 2311}, // UK 3
                // {"81.19.216.152", 2320}, // UK 7
-                {"109.70.148.112",2301} // UK 7 HC
+                {"109.70.148.112",2303}, // UK 7 HC
+
+                // Battleroylae EU Altis
+                {"81.19.212.112", 2303}, // UK2
+                {"213.239.220.239",2603}, //DE1
+                {"46.105.98.138", 2303}, // FR3
+                {"188.165.211.203",2303}, //FR5
+               
+                //Epoch
+                 {"176.57.141.183", 2303} //Madhouse
 
            };
-             
-             
-            String ascii = @" __  __ ______ _______ ______      ____      ______ 
-|  |/  |   __ \   _   |   __ \    |_   |    |      |
-|     <|   __ <       |   __ <     _|  |_ __|  --  |
-|__|\__|______/___|___|______/    |______|__|______|
-                                                    ";
+
+
+             String ascii = @" __   ___.         ___.      ____     ____ 
+|  | _\_ |__ _____ \_ |__   /_   |   /_   |
+|  |/ /| __ \\__  \ | __ \   |   |    |   |
+|    < | \_\ \/ __ \| \_\ \  |   |    |   |
+|__|_ \|___  (____  /___  /  |___| /\ |___|
+     \/    \/     \/    \/         \/      ";
             Console.WriteLine(ascii);
             Console.WriteLine("  KBAB BEATS ARMA'S BROWSER root@eirik.pw 03/15\n\n");
             servers = new List<Server>();
@@ -116,12 +157,23 @@ namespace Arma3Favorites
                 Console.Write("#");
                 Console.ResetColor();
                 Console.Write(" To Launch: ");
-                String input = Console.ReadLine();
+                var input = Console.ReadLine();
                 if (Int32.TryParse(input, out choice))
                 {
                     if ((choice > -1) && (choice < servers.Count))
                     {
+                        /* If server is locked, offer to autojoin when open */
+                        if (servers[choice].isLocked())
+                        {
+                            Console.WriteLine("Server is locked. Autojoin when open? y/n");
+                                var yesno = Console.ReadKey();
+                                if(yesno.KeyChar == 'y'){
+                                    autoJoin(servers[choice]);
+                                }
+                            
+                        }else {
                         servers[choice].open();
+                        }
                     }
                 }
                 else if (input.Equals("r"))

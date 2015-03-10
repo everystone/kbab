@@ -8,8 +8,8 @@ namespace Arma3Favorites
 {
     public static class config
     {
-        public static string exe = @"D:\Programmer\Steam\steamapps\common\Arma 3\arma3.exe";
-    
+        //public static string exe = @"D:\Programmer\Steam\steamapps\common\Arma 3\arma3.exe";
+        public static string exe = "steam://run/107410//";
     
         //Mods
         static string chernarus_wasteland = "-mod=@WSWeapons;@WSMaps;@WSRHS";
