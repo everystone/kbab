@@ -103,11 +103,11 @@ namespace Arma3Favorites
             String param = "steam://run/107410//";
             //Check mission type, add correct mod param
             if (mission.Equals("battleroyale"))
-                param += "mod=@PUBattleRoyale ";
+                param += "-mod=@PUBattleRoyale";
             if (mission.Equals("Epoch Mod"))
-                param += "mod=@Epoch ";
+                param += "-mod=@Epoch";
 
-            param += "-nosplash -connect=" + ip + " -port=" + (port - 1); //Gameport is one below steam query port
+            param += " -noLauncher -useBE -skipIntro -noSplash -noPause -world=empty -noLogs -noFilePatching -connect=" + ip + " -port=" + (port-1); //Gameport is one below steam query port
 
             game.StartInfo.FileName = param;
             //game.StartInfo.Arguments = param; 

@@ -7,16 +7,8 @@ using System.Threading.Tasks;
 
 
 /*
- * Superfast Arma3 Server browser
+ * Superfast Arma3 Server (Favorites) browser
  * by Eirik Kvarstein eirik.kvarstein@gmail.com
- * 
- * @TODO: Load favorites and exe path from file
- * Export/import as json.
- * WEll WELL WELL. Works with All Steam servers(?).
- * Let user add servers from all games that uses steam server protocol.
- * In list, sort by game. If user selects # from another game, launch that one.
- * 
- * Timeout on udp requests.
  */
 
 namespace Arma3Favorites
@@ -24,7 +16,6 @@ namespace Arma3Favorites
     class Program
     {
         static List<Server> servers;
-        //static Dictionary<string, int> favorites;
         private static String configPath = Directory.GetCurrentDirectory() + "\\kbab.conf";
         public static Config config = Config.Read(configPath);
         
@@ -66,9 +57,9 @@ namespace Arma3Favorites
             string mission = "";
             servers.Clear();
 
-            foreach (KeyValuePair<string, int> server in config.favorites)
+            foreach (favorite server in config.Favorites)
             {
-                Server s = engine.fetch(server.Key, server.Value);
+                Server s = engine.fetch(server.host, server.port+1); //Query port is gameport +1
                 if (s != null)
                 {
                     servers.Add(s);
@@ -151,6 +142,10 @@ namespace Arma3Favorites
                 {
                     Console.Clear();
                     refresh();
+                }
+                else if (input.Equals("?"))
+                {
+                    Console.WriteLine("?\t-Show this help\nr\t-Refresh list\nq\t-Quit");
                 }
                 else if (input.Equals("q"))
                 {
