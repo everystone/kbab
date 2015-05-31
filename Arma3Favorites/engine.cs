@@ -133,9 +133,6 @@ namespace Arma3Favorites
                 server.setTags(readString(rec));
                 //pos += 1; // skip 0x00
                 //int test = readbyte(rec); // 119?
-                //Debug
-                var str = System.Text.Encoding.Default.GetString(rec);
-                debug(str);
                // udpClient.Close();
                 sw.Reset();                
             }

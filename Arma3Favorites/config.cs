@@ -18,8 +18,6 @@ namespace Arma3Favorites
                 {"188.165.204.150",2303}, // EU 2
         };*/
         public List<favorite> Favorites = new List<favorite>(){
-            new favorite("94.23.15.45",2302),
-            new favorite("188.165.204.150",2902)
         };
 
 

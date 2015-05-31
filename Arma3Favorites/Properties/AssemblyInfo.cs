@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Arma3Favorites")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("kbab")]
+[assembly: AssemblyDescription("Arma 3 Server Browser")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Eirik Kvarstein")]
 [assembly: AssemblyProduct("Arma3Favorites")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCopyright("Copyright ©  Eirik Kvarstein 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
