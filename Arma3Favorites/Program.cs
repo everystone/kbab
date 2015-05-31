@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +24,10 @@ namespace Arma3Favorites
     class Program
     {
         static List<Server> servers;
-        static Dictionary<string, int> favorites;
-
+        //static Dictionary<string, int> favorites;
+        private static String configPath = Directory.GetCurrentDirectory() + "\\kbab.conf";
+        public static Config config = Config.Read(configPath);
+        
         public static void autoJoin(Server serv)
         {
             int delay = 30; //seconds
@@ -63,7 +66,7 @@ namespace Arma3Favorites
             string mission = "";
             servers.Clear();
 
-            foreach (KeyValuePair<string, int> server in favorites)
+            foreach (KeyValuePair<string, int> server in config.favorites)
             {
                 Server s = engine.fetch(server.Key, server.Value);
                 if (s != null)
@@ -100,40 +103,7 @@ namespace Arma3Favorites
             // So game server is port -1
             /*   ARMA SA-MATRA WASTELAND SERVERS */
              bool running = true;
-             favorites = new Dictionary<string, int>()
-               {
-               
-                   /* Wasteland */
-               {"37.59.53.188", 2303}, // UK #5
-               {"81.19.208.112", 2603}, // UK#3 hc
-               {"85.159.42.196", 2303}, //RU #1
-               {"31.3.230.66", 3103},// UK #4  
-               {"81.19.208.101", 2603}, //UK #1
-               
-               
-               {"37.187.77.180", 2403}, //FR 1 Chernarus
-               {"81.19.208.102",2403}, // UK #2
-               {"5.39.85.45", 2303}, // UK #8            
-
-
-                // Battleroyale EU stratis
-                 {"94.23.15.45",2303}, //EU 1
-                {"188.165.204.150",2303}, // EU 2
-                {"81.19.216.152", 2311}, // UK 3
-               // {"81.19.216.152", 2320}, // UK 7
-                {"109.70.148.112",2303}, // UK 7 HC
-
-                // Battleroylae EU Altis
-                {"81.19.212.112", 2303}, // UK2
-                {"213.239.220.239",2603}, //DE1
-                {"46.105.98.138", 2303}, // FR3
-                {"188.165.211.203",2303}, //FR5
-               
-                //Epoch
-                 {"176.57.141.183", 2303} //Madhouse
-
-           };
-
+             Console.WriteLine("configPath: " + configPath);
 
              String ascii = @" __   ___.         ___.      ____     ____ 
 |  | _\_ |__ _____ \_ |__   /_   |   /_   |
@@ -142,8 +112,9 @@ namespace Arma3Favorites
 |__|_ \|___  (____  /___  /  |___| /\ |___|
      \/    \/     \/    \/         \/      ";
             Console.WriteLine(ascii);
-            Console.WriteLine("  KBAB BEATS ARMA'S BROWSER root@eirik.pw 03/15\n\n");
+            Console.WriteLine("  KBAB BEATS ARMA'S BROWSER eirik.kvarstein@gmail.com 03/15\n\n");
             servers = new List<Server>();
+
            // engine e = new engine();
             //Console.ReadKey();
             
@@ -183,6 +154,7 @@ namespace Arma3Favorites
                 }
                 else if (input.Equals("q"))
                 {
+                    config.Write(configPath);
                     running = false; //exit
                 }
             }
